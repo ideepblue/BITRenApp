@@ -43,7 +43,7 @@ public class UtilControl {
 				ContactEntity contact = new ContactEntity();
 				JSONObject jsonObject = jsonArray.getJSONObject(i).getJSONObject("BitContact");
 				
-				contact.setSid(jsonObject.getLong("id"));
+				contact.setSid(jsonObject.getInt("id"));
 				contact.setDepartment(jsonObject.getString("department"));
 				contact.setLocation(jsonObject.getString("location"));
 				contact.setPhone_number(jsonObject.getString("phone_number"));

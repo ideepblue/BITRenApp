@@ -1,13 +1,12 @@
 package org.bitren.app;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bitren.app.control.UtilControl;
 import org.bitren.app.database.DatabaseOperator;
 import org.bitren.app.entities.ContactEntity;
 import org.bitren.app.entities.NetworkStateEntity;
-
-import com.mobclick.android.MobclickAgent;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,6 +16,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,15 +28,22 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mobclick.android.MobclickAgent;
+
 public class ContactActivity extends Activity {
 	
 	private Toast toast;
+	private TextView textViewTitle;
 	private ListView listViewContact;
 	
 	private List<ContactEntity> listContact;
 	private ContactAdapter adapterContact;
 	
 	private DatabaseOperator mDBO;
+	
+	private int currentPid;
+	// 读秒用
+	private long lastHitMillis;
 	
 	private static final int MENU_REFRESH_ID = 0;
 	private static final int MENU_FEEDBACK_ID = 1;
@@ -66,6 +73,8 @@ public class ContactActivity extends Activity {
     private void initUI() {
     	toast = Toast.makeText(this, null, Toast.LENGTH_SHORT);
     	
+    	textViewTitle = (TextView)findViewById(R.id.textView_Contact_Title);
+    	
     	listViewContact = (ListView)findViewById(R.id.listView_Contact);
     	listViewContact.setOnItemClickListener(
 				new AdapterView.OnItemClickListener() {
@@ -73,32 +82,40 @@ public class ContactActivity extends Activity {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-						final String phoneNumber = ContactActivity.this.listContact.get(position).getPhone_number();
+						ContactEntity contact = ContactActivity.this.listContact.get(position);
 						
-						AlertDialog.Builder builder = new AlertDialog.Builder(ContactActivity.this);
-			        	builder.setMessage(ContactActivity.this.getString(R.string.Contact_DialPhoneNumber, phoneNumber))
-			        	       .setCancelable(false)
-			        	       .setPositiveButton(
-			        	    		   ContactActivity.this.getText(R.string.ok), 
-			        	    		   new DialogInterface.OnClickListener() {
+						if (contact.isIspeople()) {
+							final String phoneNumber = contact.getPhone_number();
+						
+							AlertDialog.Builder builder = new AlertDialog.Builder(ContactActivity.this);
+							builder.setMessage(ContactActivity.this.getString(R.string.Contact_DialPhoneNumber, phoneNumber))
+			        	       	.setCancelable(false)
+			        	       	.setPositiveButton(
+			        	       			ContactActivity.this.getText(R.string.ok), 
+			        	       				new DialogInterface.OnClickListener() {
 
-										public void onClick(DialogInterface dialog, int id) {
+			        	       					public void onClick(DialogInterface dialog, int id) {
 											
-											String tel = "tel:" + phoneNumber;
+			        	       						String tel = "tel:" + phoneNumber;
 											
-											Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(tel));
-											ContactActivity.this.startActivity(intent);
-										}
+			        	       						Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(tel));
+			        	       						ContactActivity.this.startActivity(intent);
+			        	       					}
 
 			        	    		   }
-			        	        )
-			        	       .setNegativeButton(
+			        	       	)
+			        	       	.setNegativeButton(
 			        	    		   ContactActivity.this.getText(R.string.cancel),
 			        	    		   null
-			        	           );
+			        	       	);
 			        	
-			        	AlertDialog dialog = builder.create();
-			        	dialog.show();
+							AlertDialog dialog = builder.create();
+							dialog.show();
+							
+						} else {
+							
+							ContactActivity.this.changeCurrentPid(contact.getSid());
+						}
 					}
 				}
 			);
@@ -107,19 +124,62 @@ public class ContactActivity extends Activity {
     
     private void initData() {
     	mDBO = new DatabaseOperator(this);
-    	listContact = mDBO.querySchoolCalendarAll();
+    	
+    	listContact = new ArrayList<ContactEntity>();
+    	
     	adapterContact = new ContactAdapter();
     	listViewContact.setAdapter(adapterContact);
     	
-    	if (listContact.size() == 0) {
-	    	QueryContactListTask asyncTask = new QueryContactListTask();
-	    	asyncTask.execute();
+    	changeCurrentPid(0);
+    }
+    
+    private void changeCurrentPid(int pid) {
+    	currentPid = pid;
+    	listContact.clear();
+    	listContact.addAll( mDBO.querySchoolCalendarByPid(currentPid) );
+    	adapterContact.notifyDataSetChanged();
+    	listViewContact.setSelection(0);
+    	if (pid == 0) {
+    		textViewTitle.setText(R.string.Contact_BIT);
+    	} else {
+    		ContactEntity contact = mDBO.querySchoolCalendarBySid(currentPid);
+    		textViewTitle.setText(contact.getDepartment());
     	}
     }
     
     @Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+			if (currentPid == 0) {	
+				long currentMillis = System.currentTimeMillis();
+			
+				if ((currentMillis - lastHitMillis) > 2000) {
+				
+					toast.setText(this.getText(R.string.Contact_MorePressExit));
+					toast.setDuration(Toast.LENGTH_SHORT);
+					toast.show();
+					lastHitMillis = currentMillis;
+				
+				} else {
+					this.finish();  
+				}
+			} else {
+				ContactEntity contact = mDBO.querySchoolCalendarBySid(currentPid);
+				changeCurrentPid(contact.getPid());
+			}
+			
+			return true;
+				
+		}
+		
+		return super.onKeyDown(keyCode, event);
+
+    }
+    
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    	menu.add(0, MENU_REFRESH_ID, Menu.NONE, R.string.Contact_Menu_Refresh);
+//    	menu.add(0, MENU_REFRESH_ID, Menu.NONE, R.string.Contact_Menu_Refresh);
     	menu.add(0, MENU_FEEDBACK_ID, Menu.NONE, R.string.Contact_Menu_About);
     	menu.add(0, MENU_EXIT_ID, Menu.NONE, R.string.Contact_Menu_Exit);
     	return super.onCreateOptionsMenu(menu);
@@ -173,34 +233,63 @@ public class ContactActivity extends Activity {
 				
 				viewHolder = new ViewHolder();
 				
-				viewHolder.department = (TextView)convertView.findViewById(R.id.textView_Department);
-				viewHolder.people = (TextView)convertView.findViewById(R.id.textView_People);
-				viewHolder.phone_number = (TextView)convertView.findViewById(R.id.textView_PhoneNumber);
+				viewHolder.big = (TextView)convertView.findViewById(R.id.textView_Big);
+				viewHolder.email = (TextView)convertView.findViewById(R.id.textView_Email);
 				viewHolder.location = (TextView)convertView.findViewById(R.id.textView_Location);
+				viewHolder.phone_number = (TextView)convertView.findViewById(R.id.textView_PhoneNumber);
+				viewHolder.indicator = (TextView)convertView.findViewById(R.id.textView_Indicator);
 				
 				convertView.setTag(viewHolder);
 				
 			} else {
-				
+			
 				viewHolder = (ViewHolder) convertView.getTag();
 				
 			}
 			
 			ContactEntity mEntity = (ContactEntity)getItem(position);
 			
-			viewHolder.department.setText(mEntity.getDepartment());
-			viewHolder.people.setText(mEntity.getPeople());
-			viewHolder.phone_number.setText(mEntity.getPhone_number());
-			viewHolder.location.setText(mEntity.getLocation());
+			if (mEntity.isIspeople()) {
+				viewHolder.big.setText(mEntity.getPeople());
+				viewHolder.indicator.setVisibility(View.GONE);
+			} else {
+				viewHolder.big.setText(mEntity.getDepartment());
+				viewHolder.indicator.setVisibility(View.VISIBLE);
+			}
+			
+			if (mEntity.getLocation().length() == 0) {
+				viewHolder.location.setVisibility(View.GONE);
+			} else {
+				viewHolder.location.setVisibility(View.VISIBLE);
+				viewHolder.location.setText(
+						ContactActivity.this.getString(R.string.Contact_Location) + mEntity.getLocation());
+			}
+			
+			if (mEntity.getPhone_number().length() == 0) {
+				viewHolder.phone_number.setVisibility(View.GONE);
+			} else {
+				viewHolder.phone_number.setVisibility(View.VISIBLE);
+				viewHolder.phone_number.setText(
+						ContactActivity.this.getString(R.string.Contact_Phone) + mEntity.getPhone_number());
+			}
+			
+			if (mEntity.getEmail().length() == 0) {
+				viewHolder.email.setVisibility(View.GONE);
+			} else {
+				viewHolder.email.setVisibility(View.VISIBLE);
+				viewHolder.email.setText(
+						ContactActivity.this.getString(R.string.Contact_Email) + mEntity.getEmail());
+			}
 			
 			return convertView;
 		}
     	
 		class ViewHolder {
-			TextView department;
-			TextView people;
+			TextView big;
 			TextView phone_number;
 			TextView location;
+			TextView email;
+			TextView indicator;
 		}
     }
     

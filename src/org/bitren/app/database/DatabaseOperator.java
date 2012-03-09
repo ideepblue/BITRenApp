@@ -43,11 +43,14 @@ public class DatabaseOperator {
 		while (cur.moveToNext()) {
 			ContactEntity contact = new ContactEntity();
 			
-			contact.setId(cur.getLong(cur.getColumnIndex(ContactColumns._ID)));
-			contact.setSid(cur.getLong(cur.getColumnIndex(ContactColumns.SID)));
+			contact.setId(cur.getInt(cur.getColumnIndex(ContactColumns._ID)));
+			contact.setSid(cur.getInt(cur.getColumnIndex(ContactColumns.SID)));
+			contact.setPid(cur.getInt(cur.getColumnIndex(ContactColumns.PID)));
+			contact.setIspeople(cur.getInt(cur.getColumnIndex(ContactColumns.ISPEOPLE)) > 0);
 			contact.setDepartment(cur.getString(cur.getColumnIndex(ContactColumns.DEPARTMENT)));
 			contact.setLocation(cur.getString(cur.getColumnIndex(ContactColumns.LOCATION)));
-			contact.setPhone_number(cur.getString(cur.getColumnIndex(ContactColumns.PHONE_NUMBER)));
+			contact.setEmail(cur.getString(cur.getColumnIndex(ContactColumns.EMAIL)));
+			contact.setPhone_number(cur.getString(cur.getColumnIndex(ContactColumns.PHONE)));
 			contact.setPeople(cur.getString(cur.getColumnIndex(ContactColumns.PEOPLE)));
 			
 			result.add(contact);
@@ -57,19 +60,101 @@ public class DatabaseOperator {
 		return result;
 	}
 
+	public ContactEntity querySchoolCalendarBySid(int sid) {
+		Cursor cur;
+		String whereClause = ContactColumns.SID + " = ?";
+		String[] whereArgs = new String[] { Integer.toString(sid) };
+		String sortOrder = null;
+		
+		cur = resolver.query(
+				Uri.parse(DatabaseProvider.CONTENT_URI + ContactColumns.TABLE_NAME), 
+				null, 
+				whereClause, 
+				whereArgs, 
+				sortOrder
+				);
+		
+		if (cur.moveToFirst()) {
+			
+			ContactEntity result = new ContactEntity();
+			
+			result.setId(cur.getInt(cur.getColumnIndex(ContactColumns._ID)));
+			result.setSid(cur.getInt(cur.getColumnIndex(ContactColumns.SID)));
+			result.setPid(cur.getInt(cur.getColumnIndex(ContactColumns.PID)));
+			result.setIspeople(cur.getInt(cur.getColumnIndex(ContactColumns.ISPEOPLE)) > 0);
+			result.setDepartment(cur.getString(cur.getColumnIndex(ContactColumns.DEPARTMENT)));
+			result.setLocation(cur.getString(cur.getColumnIndex(ContactColumns.LOCATION)));
+			result.setEmail(cur.getString(cur.getColumnIndex(ContactColumns.EMAIL)));
+			result.setPhone_number(cur.getString(cur.getColumnIndex(ContactColumns.PHONE)));
+			result.setPeople(cur.getString(cur.getColumnIndex(ContactColumns.PEOPLE)));
+			
+			cur.close();
+
+			return result;
+			
+		} else {
+			
+			cur.close();
+			
+			return null;
+			
+		}
+	}
+	public List<ContactEntity> querySchoolCalendarByPid(int pid) {
+		Cursor cur;
+		String whereClause = ContactColumns.PID + " = ?";
+		String[] whereArgs = new String[] { Integer.toString(pid) };
+		String sortOrder = ContactColumns.SID;
+		
+		cur = resolver.query(
+				Uri.parse(DatabaseProvider.CONTENT_URI + ContactColumns.TABLE_NAME), 
+				null, 
+				whereClause, 
+				whereArgs, 
+				sortOrder
+				);
+		
+		List<ContactEntity> result = new ArrayList<ContactEntity>();
+		
+		while (cur.moveToNext()) {
+			ContactEntity contact = new ContactEntity();
+			
+			contact.setId(cur.getInt(cur.getColumnIndex(ContactColumns._ID)));
+			contact.setSid(cur.getInt(cur.getColumnIndex(ContactColumns.SID)));
+			contact.setPid(cur.getInt(cur.getColumnIndex(ContactColumns.PID)));
+			contact.setIspeople(cur.getInt(cur.getColumnIndex(ContactColumns.ISPEOPLE)) > 0);
+			contact.setDepartment(cur.getString(cur.getColumnIndex(ContactColumns.DEPARTMENT)));
+			contact.setLocation(cur.getString(cur.getColumnIndex(ContactColumns.LOCATION)));
+			contact.setEmail(cur.getString(cur.getColumnIndex(ContactColumns.EMAIL)));
+			contact.setPhone_number(cur.getString(cur.getColumnIndex(ContactColumns.PHONE)));
+			contact.setPeople(cur.getString(cur.getColumnIndex(ContactColumns.PEOPLE)));
+			
+			result.add(contact);
+		}
+		cur.close();
+		
+		return result;
+	}
+	
 	public boolean insertContact(ContactEntity contact) {
 
 		values = new ContentValues();
 
 		values.put(ContactColumns.SID, 
 				contact.getSid());
+		values.put(ContactColumns.PID, 
+				contact.getPid());
+		values.put(ContactColumns.ISPEOPLE, 
+				contact.isIspeople());
 		values.put(ContactColumns.DEPARTMENT,
 				contact.getDepartment());
 		values.put(ContactColumns.LOCATION,
 				contact.getLocation());
+		values.put(ContactColumns.EMAIL,
+				contact.getEmail());
 		values.put(ContactColumns.PEOPLE,
 				contact.getPeople());
-		values.put(ContactColumns.PHONE_NUMBER,
+		values.put(ContactColumns.PHONE,
 				contact.getPhone_number());
 
 		Uri uri = resolver.insert(
@@ -80,7 +165,7 @@ public class DatabaseOperator {
 		if (!uri.equals(Uri.EMPTY)) {
 			
 			Log.v(TAG, "insert school_calendar into database succeed");
-			contact.setId(Long.parseLong(uri.getLastPathSegment()));
+			contact.setId(Integer.parseInt(uri.getLastPathSegment()));
 			return true;
 			
 		} else {

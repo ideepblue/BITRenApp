@@ -6,26 +6,29 @@ public class ContactEntity implements Serializable  {
 
 	private static final long serialVersionUID = 5401286085331660799L;
 	
-	private long id;
-	private long sid;
+	private int id;
+	private int sid;
+	private int pid;
+	private boolean ispeople;
 	private String department;
 	private String phone_number;
+	private String email;
 	private String location;
 	private String people;
 	
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public long getSid() {
+	public int getSid() {
 		return sid;
 	}
 
-	public void setSid(long sid) {
+	public void setSid(int sid) {
 		this.sid = sid;
 	}
 
@@ -55,5 +58,29 @@ public class ContactEntity implements Serializable  {
 	}
 	public void setPeople(String people) {
 		this.people = people;
+	}
+
+	public int getPid() {
+		return pid;
+	}
+
+	public void setPid(int pid) {
+		this.pid = pid;
+	}
+
+	public boolean isIspeople() {
+		return ispeople;
+	}
+
+	public void setIspeople(boolean ispeople) {
+		this.ispeople = ispeople;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }
