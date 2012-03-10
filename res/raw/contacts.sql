@@ -1690,3 +1690,4 @@ INSERT INTO `contacts` (`sid`, `pid`, `ispeople`, `department`, `location`, `ema
 INSERT INTO `contacts` (`sid`, `pid`, `ispeople`, `department`, `location`, `email`, `people`, `phone`) VALUES(11633, 1190, 1, '', '（原理学院时的信息）', '', '化学实验中心办公室（良乡校区）', '010-81383370');
 INSERT INTO `contacts` (`sid`, `pid`, `ispeople`, `department`, `location`, `email`, `people`, `phone`) VALUES(11634, 1190, 1, '', '（原理学院时的信息）', '', '化学实验中心实验室（良乡校区）', '010-81383371');
 INSERT INTO `contacts` (`sid`, `pid`, `ispeople`, `department`, `location`, `email`, `people`, `phone`) VALUES(11635, 1190, 1, '', '（原理学院时的信息）', '', '“原子分子簇科学”教育部重点实验室办公室（良乡校区）', '010-81383370');
+UPDATE `contacts` SET pid = -1 WHERE sid = 1;
