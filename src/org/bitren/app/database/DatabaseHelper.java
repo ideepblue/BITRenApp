@@ -11,9 +11,18 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	private static final String DATABASE_NAME = "bitren.sqlite";
 	private Context context;
+	
+	private static final String[] TABLE_CREATE = {
+		"create table if not exists "
+		+ FavoriteContactsColumns.TABLE_NAME + "("
+		+ FavoriteContactsColumns._ID + " integer primary key autoincrement, "
+		+ FavoriteContactsColumns.CONTACT_SID + " integer, "
+		+ FavoriteContactsColumns.NAME + " text "
+		+ ");"
+	};
 	
 	public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -56,57 +65,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL(s + ";");
            
         }
-		/*
-		File file = null;
-		File dir = null;
-	
-		dir = new File("data/data/" + context.getPackageName() + "/databases");
-		if (!dir.exists() || !dir.isDirectory()) {
-			dir.mkdir();
-		}
+        
+        for (String s : TABLE_CREATE) {
+
+            db.execSQL(s);
+           
+        }
 		
-		file = new File(dir, DATABASE_NAME);
-		if(file.exists()) {
-			file.delete();
-		}
-		if(!file.exists()) {
-			Log.i(DATABASE_NAME, "Uploading DatabaseFile");
-			
-			InputStream dbInputStream = context.getResources().openRawResource(R.raw.bitren);
-			FileOutputStream fos = null;
-
-			try {
-				fos = new FileOutputStream(file);
-
-				byte[] bytes = new byte[1024];
-				int length;
-				while ((length = dbInputStream.read(bytes)) > 0) {
-					fos.write(bytes, 0, length);
-				}
-
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					fos.flush();
-					fos.close();
-					dbInputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}	
-		}
-		else {
-			Log.i(DATABASE_NAME, "Database Exists");
-		}
-		*/
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+		if (oldVersion == 1) {
+			db.execSQL(TABLE_CREATE[0]);
+		}
 	}
 
 }

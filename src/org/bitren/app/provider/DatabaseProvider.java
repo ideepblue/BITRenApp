@@ -1,6 +1,6 @@
 package org.bitren.app.provider;
 
-import org.bitren.app.database.ContactColumns;
+import org.bitren.app.database.ContactsColumns;
 import org.bitren.app.database.DatabaseHelper;
 
 import android.content.ContentProvider;
@@ -21,7 +21,7 @@ public class DatabaseProvider extends ContentProvider {
 	
 	static {
 		//DatabaseProvider.URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-		DatabaseProvider.URI_MATCHER.addURI(AUTHORITY, ContactColumns.TABLE_NAME, CONTACT);
+		DatabaseProvider.URI_MATCHER.addURI(AUTHORITY, ContactsColumns.TABLE_NAME, CONTACT);
 	}
 	
 	SQLiteDatabase database;

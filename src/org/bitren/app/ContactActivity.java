@@ -4,26 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bitren.app.control.UtilControl;
+import org.bitren.app.customview.MenuDialog;
 import org.bitren.app.database.DatabaseOperator;
 import org.bitren.app.entities.ContactEntity;
 import org.bitren.app.entities.NetworkStateEntity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.Contacts;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,8 +39,10 @@ import com.mobclick.android.MobclickAgent;
 public class ContactActivity extends Activity {
 	
 	private Toast toast;
-	private TextView textViewTitle;
+	private TextView textViewDir;
 	private ListView listViewContact;
+	private ImageView imageViewBack;
+	private ImageView imageViewMenu;
 	
 	private List<ContactEntity> listContact;
 	private ContactAdapter adapterContact;
@@ -42,12 +50,12 @@ public class ContactActivity extends Activity {
 	private DatabaseOperator mDBO;
 	
 	private int currentPid;
-	// 读秒用
-	private long lastHitMillis;
-	
-	private static final int MENU_REFRESH_ID = 0;
-	private static final int MENU_FEEDBACK_ID = 1;
-	private static final int MENU_EXIT_ID = 2;
+	private static final int TAG_DAILPHONE = 0;
+	private static final int TAG_SENDEMAIL = 1;
+	private static final int TAG_ADDFAVORITE = 2;
+	private static final int TAG_ADDTOCONTACTLIST = 3;
+	private static final int TAG_FIXINFOMATION = 4;
+	private static final int TAG_SENDBYMESSAGE = 5;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +81,82 @@ public class ContactActivity extends Activity {
     private void initUI() {
     	toast = Toast.makeText(this, null, Toast.LENGTH_SHORT);
     	
-    	textViewTitle = (TextView)findViewById(R.id.textView_Contact_Title);
+    	textViewDir = (TextView)findViewById(R.id.textView_Contact_Dir);
+    	
+    	imageViewBack = (ImageView)findViewById(R.id.imageView_Contact_Back);
+    	imageViewBack.setOnClickListener(
+    			new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						if (currentPid == 0) {	
+							// 是顶层目录 再按就退出了
+							AlertDialog.Builder builder = new AlertDialog.Builder(ContactActivity.this);
+							builder.setMessage(ContactActivity.this.getString(R.string.ExitApp))
+			        	       	.setCancelable(false)
+			        	       	.setPositiveButton(
+			        	       			ContactActivity.this.getText(R.string.ok), 
+			        	       				new DialogInterface.OnClickListener() {
+
+			        	       					public void onClick(DialogInterface dialog, int id) {
+			        	       						System.exit(0);
+			        	       					}
+
+			        	    		   }
+			        	       	)
+			        	       	.setNegativeButton(
+			        	    		   ContactActivity.this.getText(R.string.cancel),
+			        	    		   null
+			        	       	);
+			        	
+							AlertDialog dialog = builder.create();
+							dialog.show();
+						} else {
+							// 非顶层目录 返回上一层目录
+							ContactEntity contact = mDBO.querySchoolCalendarBySid(currentPid);
+							changeCurrentPid(contact.getPid());
+						}
+						
+					}
+				}
+    		);
+    	
+    	imageViewMenu = (ImageView)findViewById(R.id.imageView_Contact_Menu);
+    	imageViewMenu.setOnClickListener(
+    			new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						MenuDialog menuDialog = new MenuDialog(ContactActivity.this);
+						Dialog dialog = new Dialog(ContactActivity.this);
+						View content = menuDialog.getView();
+
+						dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+						dialog.setContentView(content);
+						dialog.setCancelable(true);
+						dialog.setCanceledOnTouchOutside(true);
+						WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+						int windowWidth = ContactActivity.this.getWindowManager().getDefaultDisplay().getWidth();
+						int windowHeight = ContactActivity.this.getWindowManager().getDefaultDisplay().getHeight();
+//						int statusbarHeight = ContactActivity.this.getWindow().findViewById(Window.ID_ANDROID_CONTENT).getTop();
+//						Rect outRect = new Rect();
+//						ContactActivity.this.getWindow().getDecorView().getWindowVisibleDisplayFrame(outRect);
+//						int statusbarHeight = outRect.top;
+						int anchorBottom = imageViewMenu.getBottom();
+						int anchorRight = imageViewMenu.getRight();
+						DisplayMetrics displayMetrics = ContactActivity.this.getApplicationContext().getResources().getDisplayMetrics();;
+						float density = displayMetrics.density;
+						
+						int width = windowWidth / 2 - (windowWidth - anchorRight) - (int)(200 * density) / 2;
+						int height = windowHeight / 2 - (anchorBottom) - (int)(100 * density) / 2 - (int)(20 * density);
+						lp.x = width;
+						lp.y = -height;
+						
+						menuDialog.setDialog(dialog);
+						dialog.show();
+					}
+				}
+    		);
     	
     	listViewContact = (ListView)findViewById(R.id.listView_Contact);
     	listViewContact.setOnItemClickListener(
@@ -98,7 +181,7 @@ public class ContactActivity extends Activity {
 											
 			        	       						String tel = "tel:" + phoneNumber;
 											
-			        	       						Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(tel));
+			        	       						Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(tel));
 			        	       						ContactActivity.this.startActivity(intent);
 			        	       					}
 
@@ -119,7 +202,118 @@ public class ContactActivity extends Activity {
 					}
 				}
 			);
-    	
+
+    	listViewContact.setOnItemLongClickListener(
+    			new AdapterView.OnItemLongClickListener() {
+
+					@Override
+					public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+						final ContactEntity contact = listContact.get(position);
+						String title;
+						StringBuilder item = new StringBuilder();
+						final List<Integer> itemTag = new ArrayList<Integer>(); // 用于判断这个item的点击类型
+						
+						//根据是否为叶子 来添加长按时候的菜单
+						if (contact.isIspeople()) {
+							title = contact.getPeople();
+							
+							item.append(ContactActivity.this.getString(R.string.Contact_DailPhone) + ";");
+							itemTag.add(TAG_DAILPHONE);
+							
+							if (contact.getEmail().length() != 0) {
+								item.append(ContactActivity.this.getString(R.string.Contact_SendEmail) + ";");
+								itemTag.add(TAG_SENDEMAIL);
+							}
+							
+							item.append(ContactActivity.this.getString(R.string.Contact_AddFavorite) + ";");
+							itemTag.add(TAG_ADDFAVORITE);
+							
+							item.append(ContactActivity.this.getString(R.string.Contact_AddToContactList) + ";");
+							itemTag.add(TAG_ADDTOCONTACTLIST);
+							
+							item.append(ContactActivity.this.getString(R.string.Contact_SendByMessage) + ";");
+							itemTag.add(TAG_SENDBYMESSAGE);
+							
+							item.append(ContactActivity.this.getString(R.string.Contact_FixInfomation) + ";");
+							itemTag.add(TAG_FIXINFOMATION);
+							
+						} else {
+							title = contact.getDepartment();
+							
+							if (contact.getEmail().length() != 0) {
+								item.append(ContactActivity.this.getString(R.string.Contact_SendEmail) + ";");
+								itemTag.add(TAG_SENDEMAIL);
+							}
+							
+							item.append(ContactActivity.this.getString(R.string.Contact_FixInfomation) + ";");
+							itemTag.add(TAG_FIXINFOMATION);
+						}
+						
+						AlertDialog.Builder builder = new AlertDialog.Builder(ContactActivity.this);
+						builder.setTitle(title);
+						builder.setItems(
+								item.toString().split(";"), 
+								new DialogInterface.OnClickListener() {
+									
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										Intent intent;
+										ContactEntity parent = mDBO.querySchoolCalendarBySid(currentPid);
+										switch (itemTag.get(which)) {
+										case TAG_DAILPHONE:
+			        	       				String tel = "tel:" + contact.getPhone_number();
+	        	       						intent = new Intent(Intent.ACTION_VIEW, Uri.parse(tel));
+	        	       						ContactActivity.this.startActivity(intent);
+											break;
+										case TAG_SENDEMAIL:
+											String[] tos = { contact.getEmail() };
+											intent = new Intent(Intent.ACTION_SEND);
+											intent.putExtra(Intent.EXTRA_EMAIL, tos);
+											intent.setType("message/rfc882");
+											ContactActivity.this.startActivity(intent);
+											break;
+										case TAG_ADDFAVORITE:
+											break;
+										case TAG_ADDTOCONTACTLIST:
+											intent = new Intent(Intent.ACTION_INSERT);
+					                        intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
+					                        intent.putExtra(ContactsContract.Intents.Insert.NAME, parent.getDepartment() + " " + contact.getPeople());
+					                        intent.putExtra(ContactsContract.Intents.Insert.PHONE, contact.getPhone_number());
+					                        intent.putExtra(ContactsContract.Intents.Insert.PHONE_TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_WORK);
+					                        if (contact.getEmail().length() != 0) {
+					                        	intent.putExtra(ContactsContract.Intents.Insert.EMAIL, contact.getEmail());
+					                        	intent.putExtra(ContactsContract.Intents.Insert.EMAIL_TYPE, ContactsContract.CommonDataKinds.Email.TYPE_WORK);
+					                        }
+					                        ContactActivity.this.startActivity(intent);
+											break;
+										case TAG_FIXINFOMATION:
+											break;
+										case TAG_SENDBYMESSAGE:
+	        	       						intent = new Intent(Intent.ACTION_VIEW, Uri.parse("smsto:"));
+	        	       						String body = parent.getDepartment() + " " + contact.getPeople() + "\n"
+	        	       										+ ContactActivity.this.getString(R.string.Contact_Phone) + contact.getPhone_number();
+	        	       						if (contact.getEmail().length() != 0) {
+	        	       							body = body + ContactActivity.this.getString(R.string.Contact_Email) + contact.getEmail();
+	        	       						}
+	        	       						if (contact.getLocation().length() != 0) {
+	        	       							body = body + ContactActivity.this.getString(R.string.Contact_Location) + contact.getLocation();
+	        	       						}
+	        	       						intent.putExtra("sms_body", body);
+	        	       						ContactActivity.this.startActivity(intent);
+											break;
+										}
+										
+									}
+								}
+							);
+						
+						AlertDialog dialog = builder.create();
+						dialog.show();
+						
+						return true;
+					}
+				}
+    		);
     }
     
     private void initData() {
@@ -140,10 +334,10 @@ public class ContactActivity extends Activity {
     	adapterContact.notifyDataSetChanged();
     	listViewContact.setSelection(0);
     	if (pid == 0) {
-    		textViewTitle.setText(R.string.Contact_BIT);
+    		textViewDir.setText("> " + this.getString(R.string.Contact_BIT));
     	} else {
     		ContactEntity contact = mDBO.querySchoolCalendarBySid(currentPid);
-    		textViewTitle.setText(contact.getDepartment());
+    		textViewDir.setText("> " + contact.getDepartment());
     	}
     }
     
@@ -151,59 +345,19 @@ public class ContactActivity extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
-			if (currentPid == 0) {	
-				long currentMillis = System.currentTimeMillis();
 			
-				if ((currentMillis - lastHitMillis) > 2000) {
-				
-					toast.setText(this.getText(R.string.Contact_MorePressExit));
-					toast.setDuration(Toast.LENGTH_SHORT);
-					toast.show();
-					lastHitMillis = currentMillis;
-				
-				} else {
-					this.finish();  
-				}
-			} else {
-				ContactEntity contact = mDBO.querySchoolCalendarBySid(currentPid);
-				changeCurrentPid(contact.getPid());
-			}
-			
+			imageViewBack.performClick();
 			return true;
 				
 		}
 		
+		if (keyCode == KeyEvent.KEYCODE_MENU && event.getAction() == KeyEvent.ACTION_DOWN) {
+			imageViewMenu.performClick();
+			return true;
+		}
+		
 		return super.onKeyDown(keyCode, event);
 
-    }
-    
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-//    	menu.add(0, MENU_REFRESH_ID, Menu.NONE, R.string.Contact_Menu_Refresh);
-    	menu.add(0, MENU_FEEDBACK_ID, Menu.NONE, R.string.Contact_Menu_About);
-    	menu.add(0, MENU_EXIT_ID, Menu.NONE, R.string.Contact_Menu_Exit);
-    	return super.onCreateOptionsMenu(menu);
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	super.onOptionsItemSelected(item);
-    	
-        switch (item.getItemId()) {
-        case MENU_REFRESH_ID:
-        	QueryContactListTask asyncTask = new QueryContactListTask();
-	    	asyncTask.execute();
-            break;     
-        case 1:
-        	Intent intent = new Intent();
-    		intent.setClass(this, AboutActivity.class);
-    		startActivity(intent);
-            break;
-        case 2:
-        	this.finish();
-            break;
-        }
-        return true;
     }
     
     private class ContactAdapter extends BaseAdapter {

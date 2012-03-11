@@ -31,7 +31,7 @@ public class DatabaseOperator {
 		String[] whereArgs = null;
 		
 		cur = resolver.query(
-				Uri.parse(DatabaseProvider.CONTENT_URI + ContactColumns.TABLE_NAME), 
+				Uri.parse(DatabaseProvider.CONTENT_URI + ContactsColumns.TABLE_NAME), 
 				null, 
 				whereClause, 
 				whereArgs, 
@@ -43,15 +43,15 @@ public class DatabaseOperator {
 		while (cur.moveToNext()) {
 			ContactEntity contact = new ContactEntity();
 			
-			contact.setId(cur.getInt(cur.getColumnIndex(ContactColumns._ID)));
-			contact.setSid(cur.getInt(cur.getColumnIndex(ContactColumns.SID)));
-			contact.setPid(cur.getInt(cur.getColumnIndex(ContactColumns.PID)));
-			contact.setIspeople(cur.getInt(cur.getColumnIndex(ContactColumns.ISPEOPLE)) > 0);
-			contact.setDepartment(cur.getString(cur.getColumnIndex(ContactColumns.DEPARTMENT)));
-			contact.setLocation(cur.getString(cur.getColumnIndex(ContactColumns.LOCATION)));
-			contact.setEmail(cur.getString(cur.getColumnIndex(ContactColumns.EMAIL)));
-			contact.setPhone_number(cur.getString(cur.getColumnIndex(ContactColumns.PHONE)));
-			contact.setPeople(cur.getString(cur.getColumnIndex(ContactColumns.PEOPLE)));
+			contact.setId(cur.getInt(cur.getColumnIndex(ContactsColumns._ID)));
+			contact.setSid(cur.getInt(cur.getColumnIndex(ContactsColumns.SID)));
+			contact.setPid(cur.getInt(cur.getColumnIndex(ContactsColumns.PID)));
+			contact.setIspeople(cur.getInt(cur.getColumnIndex(ContactsColumns.ISPEOPLE)) > 0);
+			contact.setDepartment(cur.getString(cur.getColumnIndex(ContactsColumns.DEPARTMENT)));
+			contact.setLocation(cur.getString(cur.getColumnIndex(ContactsColumns.LOCATION)));
+			contact.setEmail(cur.getString(cur.getColumnIndex(ContactsColumns.EMAIL)));
+			contact.setPhone_number(cur.getString(cur.getColumnIndex(ContactsColumns.PHONE)));
+			contact.setPeople(cur.getString(cur.getColumnIndex(ContactsColumns.PEOPLE)));
 			
 			result.add(contact);
 		}
@@ -62,12 +62,12 @@ public class DatabaseOperator {
 
 	public ContactEntity querySchoolCalendarBySid(int sid) {
 		Cursor cur;
-		String whereClause = ContactColumns.SID + " = ?";
+		String whereClause = ContactsColumns.SID + " = ?";
 		String[] whereArgs = new String[] { Integer.toString(sid) };
 		String sortOrder = null;
 		
 		cur = resolver.query(
-				Uri.parse(DatabaseProvider.CONTENT_URI + ContactColumns.TABLE_NAME), 
+				Uri.parse(DatabaseProvider.CONTENT_URI + ContactsColumns.TABLE_NAME), 
 				null, 
 				whereClause, 
 				whereArgs, 
@@ -78,15 +78,15 @@ public class DatabaseOperator {
 			
 			ContactEntity result = new ContactEntity();
 			
-			result.setId(cur.getInt(cur.getColumnIndex(ContactColumns._ID)));
-			result.setSid(cur.getInt(cur.getColumnIndex(ContactColumns.SID)));
-			result.setPid(cur.getInt(cur.getColumnIndex(ContactColumns.PID)));
-			result.setIspeople(cur.getInt(cur.getColumnIndex(ContactColumns.ISPEOPLE)) > 0);
-			result.setDepartment(cur.getString(cur.getColumnIndex(ContactColumns.DEPARTMENT)));
-			result.setLocation(cur.getString(cur.getColumnIndex(ContactColumns.LOCATION)));
-			result.setEmail(cur.getString(cur.getColumnIndex(ContactColumns.EMAIL)));
-			result.setPhone_number(cur.getString(cur.getColumnIndex(ContactColumns.PHONE)));
-			result.setPeople(cur.getString(cur.getColumnIndex(ContactColumns.PEOPLE)));
+			result.setId(cur.getInt(cur.getColumnIndex(ContactsColumns._ID)));
+			result.setSid(cur.getInt(cur.getColumnIndex(ContactsColumns.SID)));
+			result.setPid(cur.getInt(cur.getColumnIndex(ContactsColumns.PID)));
+			result.setIspeople(cur.getInt(cur.getColumnIndex(ContactsColumns.ISPEOPLE)) > 0);
+			result.setDepartment(cur.getString(cur.getColumnIndex(ContactsColumns.DEPARTMENT)));
+			result.setLocation(cur.getString(cur.getColumnIndex(ContactsColumns.LOCATION)));
+			result.setEmail(cur.getString(cur.getColumnIndex(ContactsColumns.EMAIL)));
+			result.setPhone_number(cur.getString(cur.getColumnIndex(ContactsColumns.PHONE)));
+			result.setPeople(cur.getString(cur.getColumnIndex(ContactsColumns.PEOPLE)));
 			
 			cur.close();
 
@@ -102,12 +102,12 @@ public class DatabaseOperator {
 	}
 	public List<ContactEntity> querySchoolCalendarByPid(int pid) {
 		Cursor cur;
-		String whereClause = ContactColumns.PID + " = ?";
+		String whereClause = ContactsColumns.PID + " = ?";
 		String[] whereArgs = new String[] { Integer.toString(pid) };
-		String sortOrder = ContactColumns.SID;
+		String sortOrder = ContactsColumns.SID;
 		
 		cur = resolver.query(
-				Uri.parse(DatabaseProvider.CONTENT_URI + ContactColumns.TABLE_NAME), 
+				Uri.parse(DatabaseProvider.CONTENT_URI + ContactsColumns.TABLE_NAME), 
 				null, 
 				whereClause, 
 				whereArgs, 
@@ -119,15 +119,15 @@ public class DatabaseOperator {
 		while (cur.moveToNext()) {
 			ContactEntity contact = new ContactEntity();
 			
-			contact.setId(cur.getInt(cur.getColumnIndex(ContactColumns._ID)));
-			contact.setSid(cur.getInt(cur.getColumnIndex(ContactColumns.SID)));
-			contact.setPid(cur.getInt(cur.getColumnIndex(ContactColumns.PID)));
-			contact.setIspeople(cur.getInt(cur.getColumnIndex(ContactColumns.ISPEOPLE)) > 0);
-			contact.setDepartment(cur.getString(cur.getColumnIndex(ContactColumns.DEPARTMENT)));
-			contact.setLocation(cur.getString(cur.getColumnIndex(ContactColumns.LOCATION)));
-			contact.setEmail(cur.getString(cur.getColumnIndex(ContactColumns.EMAIL)));
-			contact.setPhone_number(cur.getString(cur.getColumnIndex(ContactColumns.PHONE)));
-			contact.setPeople(cur.getString(cur.getColumnIndex(ContactColumns.PEOPLE)));
+			contact.setId(cur.getInt(cur.getColumnIndex(ContactsColumns._ID)));
+			contact.setSid(cur.getInt(cur.getColumnIndex(ContactsColumns.SID)));
+			contact.setPid(cur.getInt(cur.getColumnIndex(ContactsColumns.PID)));
+			contact.setIspeople(cur.getInt(cur.getColumnIndex(ContactsColumns.ISPEOPLE)) > 0);
+			contact.setDepartment(cur.getString(cur.getColumnIndex(ContactsColumns.DEPARTMENT)));
+			contact.setLocation(cur.getString(cur.getColumnIndex(ContactsColumns.LOCATION)));
+			contact.setEmail(cur.getString(cur.getColumnIndex(ContactsColumns.EMAIL)));
+			contact.setPhone_number(cur.getString(cur.getColumnIndex(ContactsColumns.PHONE)));
+			contact.setPeople(cur.getString(cur.getColumnIndex(ContactsColumns.PEOPLE)));
 			
 			result.add(contact);
 		}
@@ -140,25 +140,25 @@ public class DatabaseOperator {
 
 		values = new ContentValues();
 
-		values.put(ContactColumns.SID, 
+		values.put(ContactsColumns.SID, 
 				contact.getSid());
-		values.put(ContactColumns.PID, 
+		values.put(ContactsColumns.PID, 
 				contact.getPid());
-		values.put(ContactColumns.ISPEOPLE, 
+		values.put(ContactsColumns.ISPEOPLE, 
 				contact.isIspeople());
-		values.put(ContactColumns.DEPARTMENT,
+		values.put(ContactsColumns.DEPARTMENT,
 				contact.getDepartment());
-		values.put(ContactColumns.LOCATION,
+		values.put(ContactsColumns.LOCATION,
 				contact.getLocation());
-		values.put(ContactColumns.EMAIL,
+		values.put(ContactsColumns.EMAIL,
 				contact.getEmail());
-		values.put(ContactColumns.PEOPLE,
+		values.put(ContactsColumns.PEOPLE,
 				contact.getPeople());
-		values.put(ContactColumns.PHONE,
+		values.put(ContactsColumns.PHONE,
 				contact.getPhone_number());
 
 		Uri uri = resolver.insert(
-				Uri.parse(DatabaseProvider.CONTENT_URI + ContactColumns.TABLE_NAME), 
+				Uri.parse(DatabaseProvider.CONTENT_URI + ContactsColumns.TABLE_NAME), 
 				values
 				);
 
@@ -181,7 +181,7 @@ public class DatabaseOperator {
 		String[] whereArgs = null;
 		
 		int affected = resolver.delete(
-				Uri.parse(DatabaseProvider.CONTENT_URI + ContactColumns.TABLE_NAME), 
+				Uri.parse(DatabaseProvider.CONTENT_URI + ContactsColumns.TABLE_NAME), 
 				whereClause, 
 				whereArgs
 				);

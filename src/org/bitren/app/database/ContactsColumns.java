@@ -2,7 +2,7 @@ package org.bitren.app.database;
 
 import android.provider.BaseColumns;
 
-public class ContactColumns implements BaseColumns {
+public class ContactsColumns implements BaseColumns {
 	public static final String TABLE_NAME = "contacts";
 	
 	public static final String SID = "sid";
