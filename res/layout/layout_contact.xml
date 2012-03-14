@@ -1,70 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/relativeLayout_SchoolList_Root"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent" 
+    android:background="@drawable/background">
 
     <RelativeLayout
-        android:id="@+id/relativeLayout_Contact_Title"
+        android:id="@+id/relativeLayout_Title"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:background="#ffffff" >
+        >
 
         <TextView
-            android:id="@+id/textView_Contact_Title"
+            android:id="@+id/textView_Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/Contact_Title"
-            android:textColor="#000000"
+            android:textColor="@color/title_text"
             android:textSize="20dp" />
 
         <ImageView
-            android:id="@+id/imageView_Contact_Back"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/imageview_button_bg_selector"
-            android:scaleType="center"
-            android:src="@drawable/imageview_button_back_selector" />
-
-        <ImageView
-            android:id="@+id/imageView_Contact_Menu"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
+            android:id="@+id/imageView_Back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/imageview_button_bg_selector"
+            android:background="@drawable/view_bg_selector"
             android:scaleType="center"
-            android:src="@drawable/imageview_button_menu_selector" />
+            android:src="@drawable/button_back" />
+
+        <ImageView
+            android:id="@+id/imageView_Menu"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/view_bg_selector"
+            android:scaleType="center"
+            android:src="@drawable/button_menu" />
     </RelativeLayout>
+    <ImageView 
+        android:id="@+id/imageView_TitleDivider"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="@color/title_divider"
+        android:layout_below="@id/relativeLayout_Title"/>
 
     <TextView
-        android:id="@+id/textView_Contact_Dir"
+        android:id="@+id/textView_Dir"
         android:layout_width="fill_parent"
         android:layout_height="24dp"
-        android:layout_below="@id/relativeLayout_Contact_Title"
-        android:singleLine="true"
-        android:text="@string/Contact_BIT"
-        android:background="#ffffff"
+        android:layout_below="@id/imageView_TitleDivider"
         android:gravity="center_vertical|left"
-        android:paddingLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="16dp"
         android:paddingRight="10dp"
-        android:textColor="#000000"
+        android:singleLine="true"
+        android:text="111"
+        android:textColor="@color/normal_text"
         android:textSize="16dp" />
+    
+    <ImageView 
+        android:id="@+id/imageView_DirDivider"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/title_divider"
+        android:layout_below="@id/textView_Dir"/>
 
     <ListView
-        android:id="@+id/listView_Contact"
+        android:id="@+id/listView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/textView_Contact_Dir"
-        android:cacheColorHint="#00000000"
+        android:layout_below="@id/imageView_DirDivider"
+        android:cacheColorHint="@android:color/transparent"
         android:fadingEdge="none"
+        android:listSelector="@android:color/transparent"
+        android:scrollbarThumbVertical="@drawable/scrollbar"
+        android:divider="@android:color/transparent"
         android:orientation="vertical"
         android:scrollbars="vertical" />
 

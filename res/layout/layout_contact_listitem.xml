@@ -2,63 +2,116 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="10dp" >
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp" >
 
-    <TextView
-        android:id="@+id/textView_Indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/imageView_Indicator"
+        android:layout_width="60dp"
+        android:layout_height="fill_parent"
+        android:layout_alignBottom="@+id/relativeLayout_Information"
         android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/relativeLayout_Information"
         android:layout_centerVertical="true"
-        android:text=">"
-        android:textSize="20dp" />
+        android:background="@drawable/view_bg_selector"
+        android:scaleType="center"
+        android:src="@drawable/triangle_right" />
+
+    <ImageView
+        android:id="@+id/imageView_Divider"
+        android:layout_width="1dp"
+        android:layout_height="fill_parent"
+        android:layout_alignBottom="@id/relativeLayout_Information"
+        android:layout_alignTop="@id/relativeLayout_Information"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_toLeftOf="@id/imageView_Indicator"
+        android:background="@color/divider_line"
+        android:scaleType="center" />
 
     <RelativeLayout
+        android:id="@id/relativeLayout_Information"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="4dp"
-        android:layout_toLeftOf="@id/textView_Indicator"
+        android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:gravity="center_vertical"
-        android:minHeight="60dp" >
+        android:layout_toLeftOf="@id/imageView_Indicator"
+        android:background="@drawable/view_bg_selector" >
 
-        <TextView
-            android:id="@+id/textView_Big"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@id/relativeLayout_Information"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="ABC"
-            android:textSize="20dp" />
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:minHeight="60dp" >
 
-        <TextView
-            android:id="@+id/textView_Location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/textView_Big"
-            android:layout_marginTop="4dp"
-            android:text="B"
-            android:textSize="16dp" />
+            <TextView
+                android:id="@+id/textView_Description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="ABC"
+                android:textColor="@color/normal_text"
+                android:textSize="20dp" />
 
-        <TextView
-            android:id="@+id/textView_Email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/textView_Location"
-            android:layout_marginTop="4dp"
-            android:text="B"
-            android:textSize="16dp" />
+            <TextView
+                android:id="@+id/textView_Location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/textView_Description"
+                android:layout_marginTop="4dp"
+                android:text="B"
+                android:textColor="@color/normal_text"
+                android:textSize="16dp" />
 
-        <TextView
-            android:id="@+id/textView_PhoneNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/textView_Email"
-            android:layout_marginTop="4dp"
-            android:text="C"
-            android:textSize="16dp" />
+            <TextView
+                android:id="@+id/textView_Email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/textView_Location"
+                android:layout_marginTop="4dp"
+                android:text="B"
+                android:textColor="@color/normal_text"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/textView_Comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/textView_Email"
+                android:layout_marginTop="4dp"
+                android:text="C"
+                android:textColor="@color/normal_text"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/textView_Phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/textView_Comment"
+                android:layout_marginTop="4dp"
+                android:text="C"
+                android:textColor="@color/normal_text"
+                android:textSize="16dp" />
+        </RelativeLayout>
     </RelativeLayout>
 
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_alignLeft="@id/relativeLayout_Information"
+        android:layout_alignRight="@id/imageView_Indicator"
+        android:layout_below="@id/relativeLayout_Information"
+        android:background="@color/divider_line"
+        android:scaleType="center" />
 </RelativeLayout>

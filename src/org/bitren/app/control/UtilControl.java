@@ -1,14 +1,10 @@
 package org.bitren.app.control;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.bitren.app.GlobalConstant;
-import org.bitren.app.entities.ContactEntity;
 import org.bitren.app.entities.NetworkStateEntity;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,6 +20,7 @@ public class UtilControl {
 		httpConnection = new HttpConnection(this.context);
 	}
 	
+	/*
 	public List<ContactEntity> queryContactAll(NetworkStateEntity networkState) {
 
 		String result = httpConnection.execGet(GlobalConstant.HOST_URL + "bit_contacts/index", null);
@@ -64,7 +61,7 @@ public class UtilControl {
 			
 			return null;
 		}
-	}
+	}*/
 	
 	public void uploadFeedback(NetworkStateEntity networkState, String version, String platform, String channel, String description) {
 		Map<String, Object> params = new HashMap<String, Object>();

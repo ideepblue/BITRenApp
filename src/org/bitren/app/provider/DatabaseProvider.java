@@ -2,6 +2,7 @@ package org.bitren.app.provider;
 
 import org.bitren.app.database.ContactsColumns;
 import org.bitren.app.database.DatabaseHelper;
+import org.bitren.app.database.FavoriteContactsColumns;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -15,13 +16,15 @@ public class DatabaseProvider extends ContentProvider {
 	public static final String AUTHORITY = "org.bitren.app";
 	public static final String CONTENT_URI = "content://" + DatabaseProvider.AUTHORITY + "/";
 	
-	private static final int CONTACT = 0;
+	private static final int CONTACTS = 0;
+	private static final int FAVORITE_CONTACTS = 1;
 	
 	private static UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);;
 	
 	static {
 		//DatabaseProvider.URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-		DatabaseProvider.URI_MATCHER.addURI(AUTHORITY, ContactsColumns.TABLE_NAME, CONTACT);
+		DatabaseProvider.URI_MATCHER.addURI(AUTHORITY, ContactsColumns.TABLE_NAME, CONTACTS);
+		DatabaseProvider.URI_MATCHER.addURI(AUTHORITY, FavoriteContactsColumns.TABLE_NAME, FAVORITE_CONTACTS);
 	}
 	
 	SQLiteDatabase database;
@@ -45,7 +48,8 @@ public class DatabaseProvider extends ContentProvider {
 		int affected = 0;
 		
 		switch (DatabaseProvider.URI_MATCHER.match(uri)) {
-		case CONTACT:
+		case CONTACTS:
+		case FAVORITE_CONTACTS:
 			table = uri.getLastPathSegment();
 			affected =  database.delete(table, whereClause, whereArgs);
 			break;
@@ -67,7 +71,8 @@ public class DatabaseProvider extends ContentProvider {
 		Long id = new Long(0);
 		
 		switch (DatabaseProvider.URI_MATCHER.match(uri)) {
-		case CONTACT:
+		case CONTACTS:
+		case FAVORITE_CONTACTS:
 			table = uri.getLastPathSegment();
 			id = database.insert(table, null, values);
 			break;
@@ -90,7 +95,8 @@ public class DatabaseProvider extends ContentProvider {
 		Cursor cursor = null;
 		
 		switch (DatabaseProvider.URI_MATCHER.match(uri)) {
-		case CONTACT:
+		case CONTACTS:
+		case FAVORITE_CONTACTS:
 			table = uri.getLastPathSegment();
 			cursor = database.query(table, projection, selection, selectionArgs, null, null, sortOrder);
 			break;
@@ -107,7 +113,8 @@ public class DatabaseProvider extends ContentProvider {
 		int affected = 0;
 		
 		switch (DatabaseProvider.URI_MATCHER.match(uri)) {
-		case CONTACT:
+		case CONTACTS:
+		case FAVORITE_CONTACTS:
 			table = uri.getLastPathSegment();
 			affected =  database.update(table, values, whereClause, whereArgs);
 			break;

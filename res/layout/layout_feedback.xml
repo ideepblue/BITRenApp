@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background" >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout_Title"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+
+        <TextView
+            android:id="@+id/textView_Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/Feedback_Title"
+            android:textColor="@color/title_text"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:id="@+id/imageView_Back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/view_bg_selector"
+            android:scaleType="center"
+            android:src="@drawable/button_back" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imageView_TitleDivider"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/relativeLayout_Title"
+        android:background="@color/title_divider" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout_Type"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/imageView_TitleDivider"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp" >
+
+        <TextView
+            android:id="@+id/textViewType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/Feedback_Type"
+            android:textColor="@color/normal_text"
+            android:textSize="16dp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/textViewType"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/radioButton_Modifiy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="42dp"
+                android:text="@string/Feedback_Modifiy"
+                android:textColor="@color/normal_text"
+                android:textSize="16dp" />
+
+            <RadioButton
+                android:id="@+id/radioButton_Delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:paddingLeft="42dp"
+                android:text="@string/Feedback_Delete"
+                android:textColor="@color/normal_text"
+                android:textSize="16dp" />
+        </RadioGroup>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout_Name"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/relativeLayout_Type"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp" >
+
+        <TextView
+            android:id="@+id/textView_Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/Contact_Name"
+            android:textColor="@color/normal_text"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/editText_Name"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@id/textView_Name"
+            android:background="@drawable/edittext_bg"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:singleLine="true"
+            android:text="aAAAWEFKJSKDJFKWZZZZZZZZZZZZZZZZZZZZ"
+            android:textColor="@color/normal_text"
+            android:textSize="16dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout_Phone"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/relativeLayout_Name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" >
+
+        <TextView
+            android:id="@+id/textView_Phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/Contact_Phone"
+            android:textColor="@color/normal_text"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/editText_Phone"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@id/textView_Phone"
+            android:background="@drawable/edittext_bg"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:singleLine="true"
+            android:text="aAAAWEFKJSKDJFKWZZZZZZZZZZZZZZZZZZZZ"
+            android:textColor="@color/normal_text"
+            android:textSize="16dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout_Location"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/relativeLayout_Phone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" >
+
+        <TextView
+            android:id="@+id/textView_Location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/Contact_Location"
+            android:textColor="@color/normal_text"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/editText_Location"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@id/textView_Location"
+            android:background="@drawable/edittext_bg"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:singleLine="true"
+            android:text="aAAAWEFKJSKDJFKWZZZZZZZZZZZZZZZZZZZZ"
+            android:textColor="@color/normal_text"
+            android:textSize="16dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout_Email"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/relativeLayout_Location"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" >
+
+        <TextView
+            android:id="@+id/textView_Email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/Contact_Email"
+            android:textColor="@color/normal_text"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/editText_Email"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@id/textView_Email"
+            android:background="@drawable/edittext_bg"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:singleLine="true"
+            android:text="aAAAWEFKJSKDJFKWZZZZZZZZZZZZZZZZZZZZ"
+            android:textColor="@color/normal_text"
+            android:textSize="16dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout_Comment"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/relativeLayout_Email"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" >
+
+        <TextView
+            android:id="@+id/textView_Comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/Contact_Comment"
+            android:textColor="@color/normal_text"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/editText_Comment"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@id/textView_Comment"
+            android:background="@drawable/edittext_bg"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:singleLine="true"
+            android:text="aAAAWEFKJSKDJFKWZZZZZZZZZZZZZZZZZZZZ"
+            android:textColor="@color/normal_text"
+            android:textSize="16dp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView_Submit"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:text="@string/About_CommitFeedback"
+        android:textColor="@color/normal_text"
+        android:textSize="16dp" />
+
+    <ImageView
+        android:id="@+id/imageView_DividerLine"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_above="@id/textView_Submit"
+        android:background="@color/divider_line" />
+
+    <EditText
+        android:id="@+id/editText_InputFeedbackField"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/imageView_DividerLine"
+        android:layout_below="@id/relativeLayout_Comment"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edittext_bg"
+        android:gravity="left"
+        android:hint="@string/Feedback_LastHint"
+        android:padding="4dp"
+        android:textColor="@color/normal_text"
+        android:textSize="16dp" />
+
+</RelativeLayout>

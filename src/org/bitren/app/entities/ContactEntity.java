@@ -10,11 +10,11 @@ public class ContactEntity implements Serializable  {
 	private int sid;
 	private int pid;
 	private boolean ispeople;
-	private String department;
-	private String phone_number;
+	private String description;
 	private String email;
 	private String location;
-	private String people;
+	private String comment;
+	private String phone;
 	
 	public int getId() {
 		return id;
@@ -31,33 +31,13 @@ public class ContactEntity implements Serializable  {
 	public void setSid(int sid) {
 		this.sid = sid;
 	}
-
-	public String getDepartment() {
-		return department;
-	}
 	
-	public void setDepartment(String department) {
-		this.department = department;
-	}
-	
-	public String getPhone_number() {
-		return phone_number;
-	}
-	
-	public void setPhone_number(String phone_number) {
-		this.phone_number = phone_number;
-	}
 	public String getLocation() {
 		return location;
 	}
+	
 	public void setLocation(String location) {
 		this.location = location;
-	}
-	public String getPeople() {
-		return people;
-	}
-	public void setPeople(String people) {
-		this.people = people;
 	}
 
 	public int getPid() {
@@ -82,5 +62,29 @@ public class ContactEntity implements Serializable  {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 }

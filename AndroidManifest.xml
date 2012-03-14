@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.bitren.app"
-    android:versionCode="1"
+    android:versionCode="2"
     android:versionName="@string/version" >
 
     <uses-sdk android:minSdkVersion="7" />
@@ -34,6 +34,7 @@
         </activity>
         
         <activity android:name=".ContactActivity" android:screenOrientation="portrait" />
+        <activity android:name=".FeedbackActivity" android:screenOrientation="portrait" />
         <activity android:name=".AboutActivity" android:screenOrientation="portrait" />
         
         <!-- 友盟统计 -->

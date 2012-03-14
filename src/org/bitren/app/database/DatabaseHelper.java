@@ -16,12 +16,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private Context context;
 	
 	private static final String[] TABLE_CREATE = {
-		"create table if not exists "
-		+ FavoriteContactsColumns.TABLE_NAME + "("
-		+ FavoriteContactsColumns._ID + " integer primary key autoincrement, "
-		+ FavoriteContactsColumns.CONTACT_SID + " integer, "
-		+ FavoriteContactsColumns.NAME + " text "
-		+ ");"
 	};
 	
 	public DatabaseHelper(Context context) {
@@ -37,7 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         
         	//InputStream is = this.getResources().openRawResource (R.raw.sql);
         try { 
-        	InputStream is = context.getResources().openRawResource (R.raw.contacts);
+        	InputStream is = context.getResources().openRawResource (R.raw.database);
 
         	// We guarantee that the available method returns the total
         	// size of the asset... of course, this does mean that a single
@@ -66,11 +60,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
            
         }
         
-        for (String s : TABLE_CREATE) {
+//        for (String s : TABLE_CREATE) {
 
-            db.execSQL(s);
+//            db.execSQL(s);
            
-        }
+//        }
 		
 	}
 
@@ -78,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
 		if (oldVersion == 1) {
-			db.execSQL(TABLE_CREATE[0]);
+			onCreate(db);
 		}
 	}
 

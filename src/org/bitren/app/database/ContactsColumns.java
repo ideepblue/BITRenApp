@@ -8,9 +8,9 @@ public class ContactsColumns implements BaseColumns {
 	public static final String SID = "sid";
 	public static final String PID = "pid";
 	public static final String ISPEOPLE = "ispeople";
-	public static final String DEPARTMENT = "department";
+	public static final String DESCRIPTION = "description";
 	public static final String LOCATION = "location";
 	public static final String EMAIL = "email";
-	public static final String PEOPLE = "people";
+	public static final String COMMENT = "comment";
 	public static final String PHONE = "phone";
 }

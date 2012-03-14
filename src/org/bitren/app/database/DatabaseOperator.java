@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bitren.app.entities.ContactEntity;
+import org.bitren.app.entities.FavoriteContactEntity;
 import org.bitren.app.provider.DatabaseProvider;
 
 import android.content.ContentResolver;
@@ -25,7 +26,7 @@ public class DatabaseOperator {
 		resolver = this.context.getContentResolver();
 	}
 	
-	public List<ContactEntity> querySchoolCalendarAll() {
+	public List<ContactEntity> queryContactAll() {
 		Cursor cur;
 		String whereClause = null;
 		String[] whereArgs = null;
@@ -47,11 +48,11 @@ public class DatabaseOperator {
 			contact.setSid(cur.getInt(cur.getColumnIndex(ContactsColumns.SID)));
 			contact.setPid(cur.getInt(cur.getColumnIndex(ContactsColumns.PID)));
 			contact.setIspeople(cur.getInt(cur.getColumnIndex(ContactsColumns.ISPEOPLE)) > 0);
-			contact.setDepartment(cur.getString(cur.getColumnIndex(ContactsColumns.DEPARTMENT)));
+			contact.setDescription(cur.getString(cur.getColumnIndex(ContactsColumns.DESCRIPTION)));
 			contact.setLocation(cur.getString(cur.getColumnIndex(ContactsColumns.LOCATION)));
 			contact.setEmail(cur.getString(cur.getColumnIndex(ContactsColumns.EMAIL)));
-			contact.setPhone_number(cur.getString(cur.getColumnIndex(ContactsColumns.PHONE)));
-			contact.setPeople(cur.getString(cur.getColumnIndex(ContactsColumns.PEOPLE)));
+			contact.setComment(cur.getString(cur.getColumnIndex(ContactsColumns.COMMENT)));
+			contact.setPhone(cur.getString(cur.getColumnIndex(ContactsColumns.PHONE)));
 			
 			result.add(contact);
 		}
@@ -60,7 +61,7 @@ public class DatabaseOperator {
 		return result;
 	}
 
-	public ContactEntity querySchoolCalendarBySid(int sid) {
+	public ContactEntity queryContactBySid(int sid) {
 		Cursor cur;
 		String whereClause = ContactsColumns.SID + " = ?";
 		String[] whereArgs = new String[] { Integer.toString(sid) };
@@ -82,11 +83,11 @@ public class DatabaseOperator {
 			result.setSid(cur.getInt(cur.getColumnIndex(ContactsColumns.SID)));
 			result.setPid(cur.getInt(cur.getColumnIndex(ContactsColumns.PID)));
 			result.setIspeople(cur.getInt(cur.getColumnIndex(ContactsColumns.ISPEOPLE)) > 0);
-			result.setDepartment(cur.getString(cur.getColumnIndex(ContactsColumns.DEPARTMENT)));
+			result.setDescription(cur.getString(cur.getColumnIndex(ContactsColumns.DESCRIPTION)));
 			result.setLocation(cur.getString(cur.getColumnIndex(ContactsColumns.LOCATION)));
 			result.setEmail(cur.getString(cur.getColumnIndex(ContactsColumns.EMAIL)));
-			result.setPhone_number(cur.getString(cur.getColumnIndex(ContactsColumns.PHONE)));
-			result.setPeople(cur.getString(cur.getColumnIndex(ContactsColumns.PEOPLE)));
+			result.setComment(cur.getString(cur.getColumnIndex(ContactsColumns.COMMENT)));
+			result.setPhone(cur.getString(cur.getColumnIndex(ContactsColumns.PHONE)));
 			
 			cur.close();
 
@@ -100,7 +101,7 @@ public class DatabaseOperator {
 			
 		}
 	}
-	public List<ContactEntity> querySchoolCalendarByPid(int pid) {
+	public List<ContactEntity> queryContactByPid(int pid) {
 		Cursor cur;
 		String whereClause = ContactsColumns.PID + " = ?";
 		String[] whereArgs = new String[] { Integer.toString(pid) };
@@ -123,11 +124,11 @@ public class DatabaseOperator {
 			contact.setSid(cur.getInt(cur.getColumnIndex(ContactsColumns.SID)));
 			contact.setPid(cur.getInt(cur.getColumnIndex(ContactsColumns.PID)));
 			contact.setIspeople(cur.getInt(cur.getColumnIndex(ContactsColumns.ISPEOPLE)) > 0);
-			contact.setDepartment(cur.getString(cur.getColumnIndex(ContactsColumns.DEPARTMENT)));
+			contact.setDescription(cur.getString(cur.getColumnIndex(ContactsColumns.DESCRIPTION)));
 			contact.setLocation(cur.getString(cur.getColumnIndex(ContactsColumns.LOCATION)));
 			contact.setEmail(cur.getString(cur.getColumnIndex(ContactsColumns.EMAIL)));
-			contact.setPhone_number(cur.getString(cur.getColumnIndex(ContactsColumns.PHONE)));
-			contact.setPeople(cur.getString(cur.getColumnIndex(ContactsColumns.PEOPLE)));
+			contact.setComment(cur.getString(cur.getColumnIndex(ContactsColumns.COMMENT)));
+			contact.setPhone(cur.getString(cur.getColumnIndex(ContactsColumns.PHONE)));
 			
 			result.add(contact);
 		}
@@ -146,16 +147,16 @@ public class DatabaseOperator {
 				contact.getPid());
 		values.put(ContactsColumns.ISPEOPLE, 
 				contact.isIspeople());
-		values.put(ContactsColumns.DEPARTMENT,
-				contact.getDepartment());
+		values.put(ContactsColumns.DESCRIPTION,
+				contact.getDescription());
 		values.put(ContactsColumns.LOCATION,
 				contact.getLocation());
 		values.put(ContactsColumns.EMAIL,
 				contact.getEmail());
-		values.put(ContactsColumns.PEOPLE,
-				contact.getPeople());
+		values.put(ContactsColumns.COMMENT,
+				contact.getComment());
 		values.put(ContactsColumns.PHONE,
-				contact.getPhone_number());
+				contact.getPhone());
 
 		Uri uri = resolver.insert(
 				Uri.parse(DatabaseProvider.CONTENT_URI + ContactsColumns.TABLE_NAME), 
@@ -188,4 +189,162 @@ public class DatabaseOperator {
 		
 		return affected;
 	}
+	
+	public List<FavoriteContactEntity> queryFavoriteContactAll() {
+		Cursor cur;
+		String whereClause = null;
+		String[] whereArgs = null;
+		
+		cur = resolver.query(
+				Uri.parse(DatabaseProvider.CONTENT_URI + FavoriteContactsColumns.TABLE_NAME), 
+				null, 
+				whereClause, 
+				whereArgs, 
+				null
+				);
+		
+		List<FavoriteContactEntity> result = new ArrayList<FavoriteContactEntity>();
+		
+		while (cur.moveToNext()) {
+			FavoriteContactEntity favoriteContact = new FavoriteContactEntity();
+			
+			favoriteContact.setId(cur.getInt(cur.getColumnIndex(FavoriteContactsColumns._ID)));
+			favoriteContact.setContact_sid(cur.getInt(cur.getColumnIndex(FavoriteContactsColumns.CONTACT_SID)));
+			favoriteContact.setName(cur.getString(cur.getColumnIndex(FavoriteContactsColumns.NAME)));
+			favoriteContact.setContact(this.queryContactBySid(favoriteContact.getContact_sid()));
+			
+			result.add(favoriteContact);
+		}
+		cur.close();
+		
+		return result;
+	}
+	
+	public List<ContactEntity> queryContactByFavorite() {
+		Cursor cur;
+		String whereClause = null;
+		String[] whereArgs = null;
+		
+		cur = resolver.query(
+				Uri.parse(DatabaseProvider.CONTENT_URI + FavoriteContactsColumns.TABLE_NAME), 
+				null, 
+				whereClause, 
+				whereArgs, 
+				null
+				);
+		
+		List<ContactEntity> result = new ArrayList<ContactEntity>();
+		
+		while (cur.moveToNext()) {
+			
+			ContactEntity contact = this.queryContactBySid(
+					cur.getInt(cur.getColumnIndex(FavoriteContactsColumns.CONTACT_SID)));
+			contact.setDescription(cur.getString(cur.getColumnIndex(FavoriteContactsColumns.NAME)));
+			
+			
+			result.add(contact);
+		}
+		cur.close();
+		
+		return result;
+	}
+	
+	public FavoriteContactEntity queryFavoriteContactByContactSid(int contact_sid) {
+		Cursor cur;
+		String whereClause = FavoriteContactsColumns.CONTACT_SID + " = ?";
+		String[] whereArgs = { Integer.toString(contact_sid) };
+		
+		cur = resolver.query(
+				Uri.parse(DatabaseProvider.CONTENT_URI + FavoriteContactsColumns.TABLE_NAME), 
+				null, 
+				whereClause, 
+				whereArgs, 
+				null
+				);
+		
+		FavoriteContactEntity result = new FavoriteContactEntity();
+		
+		if (cur.moveToFirst()) {
+			
+			result.setId(cur.getInt(cur.getColumnIndex(FavoriteContactsColumns._ID)));
+			result.setContact_sid(cur.getInt(cur.getColumnIndex(FavoriteContactsColumns.CONTACT_SID)));
+			result.setName(cur.getString(cur.getColumnIndex(FavoriteContactsColumns.NAME)));
+			result.setContact(this.queryContactBySid(result.getContact_sid()));
+			
+			cur.close();
+			
+			return result;
+			
+			
+		} else {
+			
+			cur.close();
+			
+			return null;
+			
+		}
+
+	}
+
+	public boolean insertFavoriteContact(FavoriteContactEntity favoriteContact) {
+
+		values = new ContentValues();
+
+		values.put(FavoriteContactsColumns.CONTACT_SID, 
+				favoriteContact.getContact_sid());
+		values.put(FavoriteContactsColumns.NAME, 
+				favoriteContact.getName());
+
+		Uri uri = resolver.insert(
+				Uri.parse(DatabaseProvider.CONTENT_URI + FavoriteContactsColumns.TABLE_NAME), 
+				values
+				);
+
+		if (!uri.equals(Uri.EMPTY)) {
+			
+			favoriteContact.setId(Integer.parseInt(uri.getLastPathSegment()));
+			return true;
+			
+		} else {
+			
+			return false;
+			
+		}
+	}
+	
+	public int updateFavoriteContactById(FavoriteContactEntity favoriteContact) {
+		
+		values = new ContentValues();
+
+		values.put(FavoriteContactsColumns.CONTACT_SID, 
+			favoriteContact.getContact_sid());
+		values.put(FavoriteContactsColumns.NAME, 
+			favoriteContact.getName());
+
+		String whereClause = FavoriteContactsColumns._ID + " = ?";
+		String[] whereArgs = new String[]{ Long.toString(favoriteContact.getId()) };
+
+		int affected = resolver.update(
+				Uri.parse(DatabaseProvider.CONTENT_URI + FavoriteContactsColumns.TABLE_NAME), 
+				values, 
+				whereClause,
+				whereArgs
+				);
+
+		return affected;
+	}
+
+	public int deleteFavoriteContactByContactSid(int contact_sid) {
+		String whereClause = FavoriteContactsColumns.CONTACT_SID + " = ?";
+		String[] whereArgs = new String[]{ Integer.toString(contact_sid) };
+		
+		int affected = resolver.delete(
+				Uri.parse(DatabaseProvider.CONTENT_URI + FavoriteContactsColumns.TABLE_NAME), 
+				whereClause, 
+				whereArgs
+				);
+		
+		return affected;
+	}
+
 }

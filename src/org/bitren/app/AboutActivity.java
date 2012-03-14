@@ -3,24 +3,25 @@ package org.bitren.app;
 import org.bitren.app.control.UtilControl;
 import org.bitren.app.entities.NetworkStateEntity;
 
-import com.mobclick.android.MobclickAgent;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.mobclick.android.MobclickAgent;
 
 public class AboutActivity extends Activity {
 	
 	private Toast toast;
 	private TextView textViewVersion;
-	private Button buttonSubmit;
+	private TextView textViewSubmit;
 	private EditText editTextFeedback;
+	private ImageView imageViewBack;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +47,24 @@ public class AboutActivity extends Activity {
 		
 		toast = Toast.makeText(this, null, Toast.LENGTH_SHORT);
 		
-		textViewVersion = (TextView)findViewById(R.id.textView_About_Version);
-		textViewVersion.setText(this.getString(R.string.About_Version) + this.getString(R.string.version));
+    	imageViewBack = (ImageView)findViewById(R.id.imageView_Back);
+    	imageViewBack.setOnClickListener(
+    			new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						AboutActivity.this.finish();
+					}
+				}
+    		);
 		
-		editTextFeedback = (EditText)findViewById(R.id.editText_About_InputFeedbackField);
+		textViewVersion = (TextView)findViewById(R.id.textView_Version);
+		textViewVersion.setText(this.getString(R.string.About_Version) + " " + this.getString(R.string.version));
 		
-		buttonSubmit = (Button)findViewById(R.id.button_About_Submit);
-		buttonSubmit.setOnClickListener(
+		editTextFeedback = (EditText)findViewById(R.id.editText_InputFeedbackField);
+		
+		textViewSubmit = (TextView)findViewById(R.id.textView_Submit);
+		textViewSubmit.setOnClickListener(
 				new View.OnClickListener(){
 					public void onClick(View view) {
 						

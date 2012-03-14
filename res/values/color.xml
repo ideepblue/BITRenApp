@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="title_text">#ffffff</color>
+    <color name="normal_text">#ffffff</color>
+    <color name="view_bg_pressed">#2c7c9a</color>
+    <color name="divider_line">#343739</color>
+    <color name="title_divider">#33b5e5</color>
+</resources>
