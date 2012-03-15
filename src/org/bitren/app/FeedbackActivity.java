@@ -29,6 +29,7 @@ public class FeedbackActivity extends Activity {
 	private EditText editTextComment;
 	private RadioGroup radioGroupType;
 	private RadioButton radioButtonModify;
+	private RadioButton radioButtonAdd;
 	private RadioButton radioButtonDelete;
 	
 	private TextView textViewSubmit;
@@ -92,19 +93,35 @@ public class FeedbackActivity extends Activity {
 							editTextLocation.setEnabled(true);
 							editTextEmail.setEnabled(true);
 							editTextComment.setEnabled(true);
-						} else {
+							editTextName.setText(mContact.getDescription());
+							editTextPhone.setText(mContact.getPhone());
+							editTextLocation.setText(mContact.getLocation());
+							editTextEmail.setText(mContact.getEmail());
+							editTextComment.setText(mContact.getComment());
+						} else if (checkedId == radioButtonDelete.getId()){
 							editTextName.setEnabled(false);
 							editTextPhone.setEnabled(false);
 							editTextLocation.setEnabled(false);
 							editTextEmail.setEnabled(false);
 							editTextComment.setEnabled(false);
+						} else {
+							editTextName.setEnabled(true);
+							editTextPhone.setEnabled(true);
+							editTextLocation.setEnabled(true);
+							editTextEmail.setEnabled(true);
+							editTextComment.setEnabled(true);
+							editTextName.setText("");
+							editTextPhone.setText("");
+							editTextLocation.setText("");
+							editTextEmail.setText("");
+							editTextComment.setText("");
 						}
 					}
 				}
 			);
 		radioButtonModify = (RadioButton)findViewById(R.id.radioButton_Modifiy);
+		radioButtonAdd = (RadioButton)findViewById(R.id.radioButton_Add);
 		radioButtonDelete = (RadioButton)findViewById(R.id.radioButton_Delete);
-		radioButtonModify.setChecked(true);
 		
 		textViewSubmit = (TextView)findViewById(R.id.textView_Submit);
 		textViewSubmit.setOnClickListener(
@@ -114,7 +131,7 @@ public class FeedbackActivity extends Activity {
 						String description;
 						if (radioButtonModify.isChecked()) {
 							description = 
-								"type = modify, " +
+								"type = update, " +
 								"sid = " + mContact.getSid() + ", " +
 								"description = " + editTextName.getText().toString() + ", " +
 								"phone = " + editTextPhone.getText().toString() + ", " +
@@ -126,6 +143,16 @@ public class FeedbackActivity extends Activity {
 							description = 
 								"type = delete, " +
 								"sid = " + mContact.getSid();
+						} else if (radioButtonAdd.isChecked()) {
+							description = 
+									"type = insert, " +
+									"sid = " + mContact.getSid() + ", " +
+									"description = " + editTextName.getText().toString() + ", " +
+									"phone = " + editTextPhone.getText().toString() + ", " +
+									"location = " + editTextLocation.getText().toString() + ", " +
+									"email = " + editTextEmail.getText().toString() + ", " +
+									"comment = " + editTextComment.getText().toString() + ", " +
+									"last = " + editTextFeedback.getText().toString();
 						} else {
 							description = "impossible";
 						}
@@ -141,11 +168,12 @@ public class FeedbackActivity extends Activity {
 		DatabaseOperator dbo = new DatabaseOperator(this);
 		int contact_sid = this.getIntent().getIntExtra("sid", 0);
 		mContact = dbo.queryContactBySid(contact_sid);
-		editTextName.setText(mContact.getDescription());
-		editTextPhone.setText(mContact.getPhone());
-		editTextLocation.setText(mContact.getLocation());
-		editTextEmail.setText(mContact.getEmail());
-		editTextComment.setText(mContact.getComment());
+		if (mContact.isIspeople()) {
+			radioButtonAdd.setVisibility(View.GONE);
+		} else {
+			radioButtonAdd.setVisibility(View.VISIBLE);
+		}
+		radioButtonModify.setChecked(true);
 	}
 	
 	private class UploadFeedbackTask extends AsyncTask<String, Void, NetworkStateEntity> {

@@ -75,10 +75,20 @@
                 android:textSize="16dp" />
 
             <RadioButton
+                android:id="@+id/radioButton_Add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:paddingLeft="42dp"
+                android:text="@string/Feedback_Add"
+                android:textColor="@color/normal_text"
+                android:textSize="16dp" />
+
+            <RadioButton
                 android:id="@+id/radioButton_Delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="8dp"
                 android:paddingLeft="42dp"
                 android:text="@string/Feedback_Delete"
                 android:textColor="@color/normal_text"

@@ -22,8 +22,9 @@
     <string name="FavoriteContact_AddFailed">添加失败</string>
     <string name="Feedback_Title">信息反馈</string>
     <string name="Feedback_LastHint">请在这里留下您的联系方式，以便我们对您提出信息进行核实，谢谢！</string>
-    <string name="Feedback_Type">反馈类型：</string>
+    <string name="Feedback_Type">类型：</string>
     <string name="Feedback_Modifiy">修改</string>
+    <string name="Feedback_Add">添加</string>
     <string name="Feedback_Delete">删除</string>
     <string name="Contact_Title">联系电话</string>
     <string name="Contact_SendEmail">发送邮件</string>
