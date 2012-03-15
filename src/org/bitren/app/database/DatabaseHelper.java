@@ -53,6 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         
         text = text.replaceAll("\\n", "");
+        text = text.replaceAll("\\r", "");
         String[] str = text.split(";");
         for (String s : str) {
 
