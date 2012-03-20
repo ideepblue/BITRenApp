@@ -35,6 +35,8 @@ import com.mobclick.android.MobclickAgent;
 
 public class ContactActivity extends Activity {
 	
+	private final static String TAG = "ContactActivity";
+	
 	private Toast toast;
 	private TextView textViewDir;
 	private ListView listViewContact;
@@ -61,6 +63,26 @@ public class ContactActivity extends Activity {
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	MobclickAgent.setUpdateOnlyWifi(false);
+		MobclickAgent.update(this);
+//		MobclickAgent.updateAutoPopup = false; 自动更新是否弹出框
+//		MobclickAgent.setUpdateListener(
+//				new UmengUpdateListener() {
+//
+//					@Override
+//					public void onUpdateReturned(int updateStatus) {
+//						Log.v(TAG, "UpdateStatus = " + updateStatus);
+//						switch(updateStatus) {
+//						case 0://有更新
+//						case 1://无更新
+//						case 2://非wifi状态
+//						case 3://请求超时
+//						}
+//					}
+//					
+//				}
+//			);
+		
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_contact);
         
