@@ -1707,3 +1707,11 @@ INSERT INTO "favorite_contacts" ("contact_sid", "name") VALUES (10087, '保卫�
 INSERT INTO "favorite_contacts" ("contact_sid", "name") VALUES (10705, '校医院急诊值班室');
 INSERT INTO "favorite_contacts" ("contact_sid", "name") VALUES (10143, '教务处教务科');
 INSERT INTO "favorite_contacts" ("contact_sid", "name") VALUES (10372, '网络服务中心客服');
+
+DROP TABLE IF EXISTS "table_timestamp";
+CREATE TABLE table_timestamp(
+    "_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" text NOT NULL,
+    "timestamp" text NOT NULL
+);
+INSERT INTO "table_timestamp" ("name", "timestamp") VALUES ('contacts', '2012-01-01 00:00:00');

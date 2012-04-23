@@ -101,6 +101,7 @@ public class DatabaseOperator {
 			
 		}
 	}
+	
 	public List<ContactEntity> queryContactByPid(int pid) {
 		Cursor cur;
 		String whereClause = ContactsColumns.PID + " = ?";
@@ -175,6 +176,38 @@ public class DatabaseOperator {
 			return false;
 			
 		}
+	}
+	
+	public int updateContactBySid(ContactEntity contact) {
+		
+		values = new ContentValues();
+
+		values.put(ContactsColumns.PID, 
+				contact.getPid());
+		values.put(ContactsColumns.ISPEOPLE, 
+				contact.isIspeople());
+		values.put(ContactsColumns.DESCRIPTION,
+				contact.getDescription());
+		values.put(ContactsColumns.LOCATION,
+				contact.getLocation());
+		values.put(ContactsColumns.EMAIL,
+				contact.getEmail());
+		values.put(ContactsColumns.COMMENT,
+				contact.getComment());
+		values.put(ContactsColumns.PHONE,
+				contact.getPhone());
+
+		String whereClause = ContactsColumns.SID + " = ?";
+		String[] whereArgs = new String[]{ Long.toString(contact.getSid()) };
+
+		int affected = resolver.update(
+				Uri.parse(DatabaseProvider.CONTENT_URI + ContactsColumns.TABLE_NAME), 
+				values, 
+				whereClause,
+				whereArgs
+				);
+
+		return affected;
 	}
 	
 	public int deleteContactAll() {
@@ -346,5 +379,55 @@ public class DatabaseOperator {
 		
 		return affected;
 	}
+	
+	public String queryTableTimestampByName(String name) {
+		Cursor cur;
+		String whereClause = TableTimestampColumns.NAME + " = ?";
+		String[] whereArgs = new String[] { name };
+		String sortOrder = null;
+		
+		cur = resolver.query(
+				Uri.parse(DatabaseProvider.CONTENT_URI + TableTimestampColumns.TABLE_NAME), 
+				null, 
+				whereClause, 
+				whereArgs, 
+				sortOrder
+				);
+		
+		if (cur.moveToFirst()) {
+			
+			String result = cur.getString(cur.getColumnIndex(TableTimestampColumns.TIMESTAMP));
+			
+			cur.close();
+
+			return result;
+			
+		} else {
+			
+			cur.close();
+			
+			return null;
+			
+		}
+	}
+	
+	public int updateTableTimestampByName(String name, String timestamp) {
+		
+		values = new ContentValues();
+
+		values.put(TableTimestampColumns.TIMESTAMP, timestamp);
+
+		String whereClause = TableTimestampColumns.NAME + " = ?";
+		String[] whereArgs = new String[]{ name };
+
+		int affected = resolver.update(
+				Uri.parse(DatabaseProvider.CONTENT_URI + TableTimestampColumns.TABLE_NAME), 
+				values, 
+				whereClause,
+				whereArgs
+				);
+
+		return affected;
+	} 
 
 }

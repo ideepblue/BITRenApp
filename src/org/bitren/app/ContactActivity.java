@@ -11,13 +11,17 @@ import org.bitren.app.entities.FavoriteContactEntity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Selection;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +52,8 @@ public class ContactActivity extends Activity {
 	
 	private DatabaseOperator mDBO;
 	
+	private ContactRecevier contactRecevier;
+	
 	private long lastHitMillis;
 	
 	private int currentPid;
@@ -64,7 +70,7 @@ public class ContactActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	MobclickAgent.setUpdateOnlyWifi(false);
-		MobclickAgent.update(this);
+		MobclickAgent.update(this, 1000 * 60 * 60 * 24);
 //		MobclickAgent.updateAutoPopup = false; 自动更新是否弹出框
 //		MobclickAgent.setUpdateListener(
 //				new UmengUpdateListener() {
@@ -86,6 +92,7 @@ public class ContactActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_contact);
         
+        initAction();
         initUI();
         initData();
     }
@@ -164,7 +171,7 @@ public class ContactActivity extends Activity {
 						float density = displayMetrics.density;
 						
 						int width = windowWidth / 2 - anchorLeft - (int)(200 * density) / 2;
-						int height = windowHeight / 2 - (anchorBottom) - (int)((100 + 20) * density) / 2;
+						int height = windowHeight / 2 - (anchorBottom) - (int)((200 + 20) * density) / 2;
 						lp.x = -width;
 						lp.y = -height;
 						
@@ -345,6 +352,14 @@ public class ContactActivity extends Activity {
     	listViewContact.setAdapter(adapterContact);
     	
     	changeCurrentPid(1);
+    }
+    
+    private void initAction() {
+    	contactRecevier = new ContactRecevier();
+    	
+    	IntentFilter intentFilter = new IntentFilter();
+    	intentFilter.addAction(BitrenActions.ACTION_REFRESH_CONTACT);
+    	this.registerReceiver(contactRecevier, intentFilter);
     }
     
     private void changeCurrentPid(int pid) {
@@ -766,76 +781,19 @@ public class ContactActivity extends Activity {
 			dialog.show();			
 		}
 	};
-    /*
-    private class QueryContactListTask extends AsyncTask<Void, Void, NetworkStateEntity> {
-		private UtilControl userInfoControl;
-		private NetworkStateEntity networkState;
-		private ProgressDialog progressDialog;
-		private List<ContactEntity> list;
-		
-		@Override
-		protected void onPreExecute() {
-			userInfoControl = new UtilControl(ContactActivity.this);
-			networkState = new NetworkStateEntity();
-			
-			this.progressDialog = ProgressDialog.show(
-					ContactActivity.this,
-					null,
-					ContactActivity.this.getText(R.string.Contact_QueryContactList),
-					true, 
-					false
-					);
-			MobclickAgent.onEvent(ContactActivity.this, GlobalConstant.UMENG_REFRESH);
-		}
-		
-		@Override
-		protected NetworkStateEntity doInBackground(Void... arg) {
-			
-			list = userInfoControl.queryContactAll(networkState);
-			
-			return networkState;
-		}
-		
-		protected void onPostExecute(NetworkStateEntity networkState) {
-			
-			if(networkState.getState().equals(NetworkStateEntity.OK)) {
-				
-				mDBO.deleteContactAll();
-				
-				for (int i = 0; i < list.size(); i++) {
-					mDBO.insertContact(list.get(i));
-				}
-				
-				listContact.clear();
-				listContact.addAll(list);
+    
+	private class ContactRecevier extends BroadcastReceiver {
 
-				adapterContact.notifyDataSetChanged();
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.v(TAG, "recevie");
+			if (intent.getAction().equals(BitrenActions.ACTION_REFRESH_CONTACT)) {
 				
-			} else if (networkState.getState().equals(NetworkStateEntity.SERVER_ERROR)) {
-				
-				toast.setText(ContactActivity.this.getString(R.string.ServerError));
-				toast.setDuration(Toast.LENGTH_SHORT);
-				toast.show();
-					
-			} else if (networkState.getState().equals(NetworkStateEntity.HTTP_ERROR)) {
-				
-				toast.setText(ContactActivity.this.getString(R.string.NetworkConnectionFailed));
-				toast.setDuration(Toast.LENGTH_SHORT);
-				toast.show();
-				
-			} else if (networkState.getState().equals(NetworkStateEntity.JSON_ERROR)) {
-				
-				toast.setText(ContactActivity.this.getText(R.string.JsonError));
-				toast.setDuration(Toast.LENGTH_SHORT);
-				toast.show();
-				
-			} else {
-				toast.setText(ContactActivity.this.getString(R.string.UnknownError));
-				toast.setDuration(Toast.LENGTH_SHORT);
-				toast.show();
+				Log.v(TAG, "recevie1");
+				// 需要重新更新Contact界面
+				changeCurrentPid(1);
 			}
-			
-			this.progressDialog.dismiss();
 		}
-	}*/
+		
+	}
 }

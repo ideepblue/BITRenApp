@@ -57,6 +57,7 @@ public class HttpConnection {
 	}
 
 	public String execPost(String url, Map<String, Object> rawParams) {
+		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 
 		for (String key : rawParams.keySet()) {
@@ -160,39 +161,51 @@ public class HttpConnection {
 		}		
 	}
 	
-	public HttpEntity execGetFile(String url, NetworkStateEntity networkState) {
+	public HttpEntity execPost(String url, Map<String, Object> rawParams, NetworkStateEntity networkState) {
 
-		httpGet = new HttpGet(url);
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+		for (String key : rawParams.keySet()) {
+			params.add(new BasicNameValuePair(key, rawParams.get(key)
+					.toString()));
+		}
+
+		httpPost = new HttpPost(url);
 
 		try {
 			
-			httpResponse = httpClient.execute(httpGet);
+			httpPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+			httpResponse = httpClient.execute(httpPost);
 
 			if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 				if (httpResponse.getEntity() != null) {
 					
 					networkState.setState(NetworkStateEntity.OK);
-					networkState.setInfo(NetworkStateEntity.OK);
+					networkState.setDetail(NetworkStateEntity.OK);
+					networkState.setInfo(context.getString(R.string.HttpError));
 					
 					return httpResponse.getEntity();
 
 				} else {
 					
 					networkState.setState(NetworkStateEntity.HTTP_ERROR);
-					networkState.setInfo("HttpClientExec-no result");
+					networkState.setDetail("HttpClientExec-no result");
+					networkState.setInfo(context.getString(R.string.HttpError));
 					
 					return null;
 				}
 			} else {
 				networkState.setState(NetworkStateEntity.HTTP_ERROR);
-				networkState.setInfo("HttpClientExec-" + httpResponse.getStatusLine());
+				networkState.setDetail("HttpClientExec-" + httpResponse.getStatusLine());
+				networkState.setInfo(context.getString(R.string.HttpError));
 				return null;
 			}
 			
 		} catch (ClientProtocolException e) {
 			
 			networkState.setState(NetworkStateEntity.HTTP_ERROR);
-			networkState.setInfo("ClientProtocolException-" + e.getMessage());
+			networkState.setDetail("ClientProtocolException-" + e.getMessage());
+			networkState.setInfo(context.getString(R.string.HttpError));
 			
 			return null;
 			
@@ -205,7 +218,63 @@ public class HttpConnection {
 			// Host is unresolved
 			// Connect to HOST_URL timed out
 			networkState.setState(NetworkStateEntity.HTTP_ERROR);
-			networkState.setInfo("IOException-" + e.getMessage());
+			networkState.setDetail("IOException-" + e.getMessage());
+			networkState.setInfo(context.getString(R.string.HttpError));
+			return null;
+		}		
+	}
+	
+	public HttpEntity execGet(String url, Map<String, Object> rawParams, NetworkStateEntity networkState) {
+
+		httpGet = new HttpGet(url);
+
+		try {
+			
+			httpResponse = httpClient.execute(httpGet);
+
+			if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				if (httpResponse.getEntity() != null) {
+					
+					networkState.setState(NetworkStateEntity.OK);
+					networkState.setDetail(NetworkStateEntity.OK);
+					networkState.setInfo(context.getString(R.string.HttpError));
+					
+					return httpResponse.getEntity();
+
+				} else {
+					
+					networkState.setState(NetworkStateEntity.HTTP_ERROR);
+					networkState.setDetail("HttpClientExec-no result");
+					networkState.setInfo(context.getString(R.string.HttpError));
+					
+					return null;
+				}
+			} else {
+				networkState.setState(NetworkStateEntity.HTTP_ERROR);
+				networkState.setDetail("HttpClientExec-" + httpResponse.getStatusLine());
+				networkState.setInfo(context.getString(R.string.HttpError));
+				return null;
+			}
+			
+		} catch (ClientProtocolException e) {
+			
+			networkState.setState(NetworkStateEntity.HTTP_ERROR);
+			networkState.setDetail("ClientProtocolException-" + e.getMessage());
+			networkState.setInfo(context.getString(R.string.HttpError));
+			
+			return null;
+			
+		} catch (IOException e) {
+			
+			// Socket is not connected
+			// Network unreachable
+			// No route to host
+			// Connection to HOST_URL refused
+			// Host is unresolved
+			// Connect to HOST_URL timed out
+			networkState.setState(NetworkStateEntity.HTTP_ERROR);
+			networkState.setDetail("IOException-" + e.getMessage());
+			networkState.setInfo(context.getString(R.string.HttpError));
 			return null;
 		}		
 	}

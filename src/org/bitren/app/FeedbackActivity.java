@@ -220,31 +220,13 @@ public class FeedbackActivity extends Activity {
 				toast.show();
 				FeedbackActivity.this.finish();
 				
-			} else if (state.getState().equals(NetworkStateEntity.SERVER_ERROR)) {
-				
-				toast.setText(FeedbackActivity.this.getText(R.string.ServerError));
-				toast.setDuration(Toast.LENGTH_SHORT);
-				toast.show();
-				
-			} else if (state.getState().equals(NetworkStateEntity.HTTP_ERROR)) {
-				
-				toast.setText(FeedbackActivity.this.getText(R.string.NetworkConnectionFailed));
-				toast.setDuration(Toast.LENGTH_SHORT);
-				toast.show();
-				
-			} else if (state.getState().equals(NetworkStateEntity.JSON_ERROR)) {
-				
-				toast.setText(FeedbackActivity.this.getText(R.string.JsonError));
-				toast.setDuration(Toast.LENGTH_SHORT);
-				toast.show();
-				
 			} else {
 				
-				toast.setText(FeedbackActivity.this.getString(R.string.UnknownError));
+				toast.setText(state.getInfo());
 				toast.setDuration(Toast.LENGTH_SHORT);
 				toast.show();
 				
-			}	
+			}
 		}		
 	}
 }

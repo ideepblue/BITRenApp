@@ -8,10 +8,12 @@ public class NetworkStateEntity implements Serializable {
 	public static final String OK = "ok";
 	public static final String JSON_ERROR = "json_error";
 	public static final String HTTP_ERROR = "http_error";
+	public static final String DOWNLOAD_ERROR = "download_error";
 	public static final String SERVER_ERROR = "server_error";
 
 	private String state;
 	private String info;
+	private String detail;
 	
 	public NetworkStateEntity () {
 		state = "";
@@ -32,5 +34,13 @@ public class NetworkStateEntity implements Serializable {
 
 	public void setInfo(String info) {
 		this.info = info;
+	}
+
+	public String getDetail() {
+		return detail;
+	}
+
+	public void setDetail(String detail) {
+		this.detail = detail;
 	}
 }

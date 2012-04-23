@@ -37,6 +37,66 @@
         android:background="@color/title_divider" />
 
     <RelativeLayout
+        android:id="@+id/relativeLayout_Menu_Update"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:background="@drawable/view_bg_selector" >
+
+        <TextView
+            android:id="@+id/textView_Menu_Update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/Menu_Update"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="18dp"
+            android:src="@drawable/triangle_right"
+            android:visibility="gone" />
+    </RelativeLayout>
+	
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="1dp"
+        android:background="@color/title_divider" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout_Menu_AppUpdate"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:background="@drawable/view_bg_selector" >
+
+        <TextView
+            android:id="@+id/textView_Menu_AppUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/Menu_AppUpdate"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="18dp"
+            android:src="@drawable/triangle_right"
+            android:visibility="gone" />
+    </RelativeLayout>
+    
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="1dp"
+        android:background="@color/title_divider" />
+
+    <RelativeLayout
         android:id="@+id/relativeLayout_Menu_Exit"
         android:layout_width="200dp"
         android:layout_height="50dp"

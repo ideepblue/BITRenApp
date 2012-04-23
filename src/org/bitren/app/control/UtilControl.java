@@ -3,6 +3,7 @@ package org.bitren.app.control;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.HttpEntity;
 import org.bitren.app.GlobalConstant;
 import org.bitren.app.entities.NetworkStateEntity;
 import org.json.JSONException;
@@ -20,11 +21,11 @@ public class UtilControl {
 		httpConnection = new HttpConnection(this.context);
 	}
 	
-	/*
-	public List<ContactEntity> queryContactAll(NetworkStateEntity networkState) {
+	
+	public HttpEntity queryContactAll(NetworkStateEntity networkState) {		
 
-		String result = httpConnection.execGet(GlobalConstant.HOST_URL + "bit_contacts/index", null);
-
+		return httpConnection.execGet(GlobalConstant.HOST_URL + "bit_contacts/index", null, networkState);
+/*
 		if (result.startsWith("http_error")) {
 			networkState.setState(NetworkStateEntity.HTTP_ERROR);
 			networkState.setInfo(result.split(":")[1]);
@@ -60,8 +61,17 @@ public class UtilControl {
 			networkState.setInfo("ParseJSON-" + e.getMessage());
 			
 			return null;
-		}
-	}*/
+		}*/
+	}
+	
+	public HttpEntity queryContactByTimestamp(NetworkStateEntity networkState, String timestamp) {		
+
+		Map<String, Object> params = new HashMap<String, Object>();
+
+		params.put("timestamp", timestamp);
+		
+		return httpConnection.execPost(GlobalConstant.HOST_URL + "bit_contacts/index", params, networkState);
+	}
 	
 	public void uploadFeedback(NetworkStateEntity networkState, String version, String platform, String channel, String description) {
 		Map<String, Object> params = new HashMap<String, Object>();
