@@ -49,8 +49,8 @@ public class HttpConnection {
 		HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT);
 
 		String userAgent = this.context.getString(R.string.user_agent) + "/"
-				+ this.context.getString(R.string.channel) + " "
-				+ this.context.getString(R.string.version);
+				+ this.context.getString(R.string.version) + " "
+				+ this.context.getString(R.string.platform);
 		HttpProtocolParams.setUserAgent(httpParams, userAgent);
 
 		httpClient = new DefaultHttpClient(httpParams);

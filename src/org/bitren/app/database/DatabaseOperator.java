@@ -411,11 +411,12 @@ public class DatabaseOperator {
 		}
 	}
 	
-	public int updateTableTimestampByName(String name, String timestamp) {
+	public int updateTableTimestampByName(String name, String timestamp, long localstamp) {
 		
 		values = new ContentValues();
 
 		values.put(TableTimestampColumns.TIMESTAMP, timestamp);
+		values.put(TableTimestampColumns.LOCALSTAMP, localstamp);
 
 		String whereClause = TableTimestampColumns.NAME + " = ?";
 		String[] whereArgs = new String[]{ name };

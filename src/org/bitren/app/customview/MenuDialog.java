@@ -278,7 +278,7 @@ public class MenuDialog {
 				
 				timestamp = jsonArray.getJSONObject(0).getString("timestamp");
 				Log.v(TAG, "server timestamp = " + timestamp);
-				dbo.updateTableTimestampByName(ContactsColumns.TABLE_NAME, timestamp);
+				dbo.updateTableTimestampByName(ContactsColumns.TABLE_NAME, timestamp, System.currentTimeMillis());
 				
 				Thread.sleep(1000);
 				networkState.setInfo(context.getString(R.string.Contact_UpdateDataSucceed));

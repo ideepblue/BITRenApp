@@ -7,4 +7,5 @@ public class TableTimestampColumns implements BaseColumns {
 	
 	public static final String NAME = "name";
 	public static final String TIMESTAMP = "timestamp";
+	public static final String LOCALSTAMP = "localstamp";
 }

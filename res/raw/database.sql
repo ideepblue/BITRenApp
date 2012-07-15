@@ -1712,6 +1712,7 @@ DROP TABLE IF EXISTS "table_timestamp";
 CREATE TABLE table_timestamp(
     "_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" text NOT NULL,
-    "timestamp" text NOT NULL
+    "timestamp" text NOT NULL,
+    "localstamp" integer NOT NULL
 );
-INSERT INTO "table_timestamp" ("name", "timestamp") VALUES ('contacts', '2012-01-01 00:00:00');
+INSERT INTO "table_timestamp" ("name", "timestamp", "localstamp") VALUES ('contacts', '2012-01-01 00:00:00', 0);
